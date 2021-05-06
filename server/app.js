@@ -1,8 +1,14 @@
-const express = require('express'); //ES6 syntax
+const express = require('express'); 
+const {graphqlHTTP} = require('express-graphql');
 
 const app = express();
 
-app.listen(4000, () => { //usually located it localhost:4000
+//.use lets us pass an endpoint.
+app.use('/graphql', graphqlHTTP({
+    //ie, we see the graphiql playground 
+    graphiql: true}) );
+
+app.listen(4000, () => { //usually located it localhost:PORTNUMBER
 
     console.log('Listening for requests ');
 
