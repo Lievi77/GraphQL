@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Lievi77/GraphQL/issues"
   },
-  "homepage": "https://github.com/Lievi77/GraphQL#readme"
+  "homepage": "https://github.com/Lievi77/GraphQL#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
