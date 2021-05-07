@@ -6,11 +6,20 @@ const _ = require('lodash');
 
 let usersData = [
 
-    {id: '1', name : 'Emily', age: 29},
-    {id: '11', name : 'Emily2', age: 39},
-    {id: '12', name : 'Emily3', age: 49},
-    {id: '13', name : 'Emily4', age: 59},
-    {id: '14', name : 'Emily5', age: 69},
+    {id: '1', name : 'Emily', age: 29, profession : "Sandwich Artist"},
+    {id: '11', name : 'Emily2', age: 39, profession: "Barista"},
+    {id: '12', name : 'Emily3', age: 49, profession: "Data Scientist"},
+    {id: '13', name : 'Emily4', age: 59, profession : "Streamer"},
+    {id: '14', name : 'Emily5', age: 69, profession: "Gamer"},
+
+];
+
+let dogData = [
+    {id: '2', name: 'Kipe', age: 10, breed:'Dachschund'},
+    {id: '21', name: 'Gala', age: 5, breed:'Dachschund'},
+    {id: '22', name: 'Yellow', age: 5, breed:'Chihuahua'},
+    {id: '23', name: 'Canela', age: 5, breed:'Chihuahua'},
+    {id: '24', name: 'Manning', age: 12, breed:'Chihuahua'},
 
 ];
 
@@ -33,6 +42,18 @@ const UserType = new GraphQLObjectType({
     fields: () => ({
         id: {type: GraphQLString},
         name: {type: GraphQLString} ,
+        age: {type: GraphQLInt},
+        profession : {type: GraphQLString}
+    })
+})
+
+const DogType = new GraphQLObjectType({
+    name: "Dog",
+    description: "A good boy/girl",
+    fields: () => ({
+        id: {type: GraphQLString},
+        name: {type: GraphQLString},
+        breed : {type: GraphQLString},
         age: {type: GraphQLInt},
     })
 })
@@ -63,6 +84,14 @@ const RootQuery = new GraphQLObjectType(
                     return _.find(usersData , {id: args.id })
 
                 }
+            },
+            dog: {
+                type: DogType,
+                args: {id: {type: GraphQLString}},
+                resolve(parent,args){
+                    return _.find(dogData, {id: args.id})
+                }
+
             }
 
         }
