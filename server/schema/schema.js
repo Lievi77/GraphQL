@@ -1,5 +1,21 @@
 //! Schema def example 
 const graphql = require('graphql');
+const _ = require('lodash');
+
+// ? Dummy Data Def
+
+let usersData = [
+
+    {id: '1', name : 'Emily', age: 29},
+    {id: '11', name : 'Emily2', age: 39},
+    {id: '12', name : 'Emily3', age: 49},
+    {id: '13', name : 'Emily4', age: 59},
+    {id: '14', name : 'Emily5', age: 69},
+
+];
+
+// ? Dummy Data def end
+
 
 //IMPORT TYPES
 const {
@@ -42,7 +58,9 @@ const RootQuery = new GraphQLObjectType(
 
                     //get and return data from datasource / database
 
-                    
+                    //! To query obj users we will use the Lodash module
+                    //* the second argument for find() is the args provided.
+                    return _.find(usersData , {id: args.id })
 
                 }
             }
