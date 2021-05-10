@@ -78,6 +78,11 @@ const UserType = new GraphQLObjectType({
   }),
 });
 
+/*
+! Pro Tip: Many relationship -> _.filter()
+!          One relationship -> _.find() 
+*/
+
 const DogType = new GraphQLObjectType({
   name: "Dog",
   description: "A good boy/girl",
