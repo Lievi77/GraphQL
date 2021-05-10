@@ -140,6 +140,7 @@ const PostType = new GraphQLObjectType({
 //! IMPORTANT: ROOT QUERY
 // * We have to tell GraphQL how our queries will be structured
 // * ie, what to return
+// * Think of it as an entry point to our graph/network
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   description: "Root Query Definition",
@@ -187,5 +188,43 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
+//! MUTATIONS
+
+const Mutation = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    //* Think of the next definition as a method that creates a new instance
+    createUser: {
+      type: UserType,
+      args: {
+        //id: { type: GraphQLID }
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        profession: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        let user = {
+          name: args.name,
+          age: args.age,
+          profession: args.profession,
+        };
+        return user;
+      },
+    },
+    createPost: {
+      type: PostType,
+      args: {
+        //id: {type: GraphQLID},
+        comment: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        let post = { comment: args.comment };
+        return post;
+      },
+    },
+  },
+});
+
 //let the Schema be known to our app
-module.exports = new GraphQLSchema({ query: RootQuery });
+// Must pass mutation to GraphQLSchema
+module.exports = new GraphQLSchema({ query: RootQuery, mutation: Mutation });
