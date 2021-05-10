@@ -31,7 +31,7 @@ let hobbyData = [
 let postData = [
   //userid shows relationship
   { id: "4", comment: " I am awesom42323423e", userid: "1" },
-  { id: "41", comment: " I am awesome5435243", userid: "11" },
+  { id: "41", comment: " I am awesome5435243", userid: "1" },
   { id: "42", comment: " I am awesome243423", userid: "12" },
   { id: "43", comment: " I am awesome433243", userid: "13" },
   { id: "44", comment: " I am awesome677", userid: "14" },
@@ -46,6 +46,7 @@ const {
   GraphQLString,
   GraphQLInt,
   GraphQLSchema,
+  GraphQLList,
 } = graphql;
 
 // ? Create new types/objs
@@ -57,6 +58,23 @@ const UserType = new GraphQLObjectType({
     name: { type: GraphQLString },
     age: { type: GraphQLInt },
     profession: { type: GraphQLString },
+    //? But what if happens if we want all posts created/related to a user?
+    // ? A: We use the GraphQLList type
+    //! Note that it is post*s*, plural. Since we are returning numerous instances
+    posts: {
+      type: new GraphQLList(PostType),
+      resolve(parent, args) {
+        //type of parent is UserType
+
+        return _.filter(postData, { userid: parent.id });
+      },
+    },
+    hobbies: {
+      type: new GraphQLList(HobbyType),
+      resolve(parent, args) {
+        return _.filter(hobbyData, { userid: parent.id });
+      },
+    },
   }),
 });
 
