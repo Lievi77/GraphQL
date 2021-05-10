@@ -13,28 +13,28 @@ let usersData = [
 ];
 
 let dogData = [
-  { id: "2", name: "Kipe", age: 10, breed: "Dachschund", userid: "1" },
-  { id: "21", name: "Gala", age: 5, breed: "Dachschund", userid: "11" },
-  { id: "22", name: "Yellow", age: 5, breed: "Chihuahua", userid: "12" },
-  { id: "23", name: "Canela", age: 5, breed: "Chihuahua", userid: "13" },
-  { id: "24", name: "Manning", age: 12, breed: "Chihuahua", userid: "14" },
+  { id: "2", name: "Kipe", age: 10, breed: "Dachschund", userID: "1" },
+  { id: "21", name: "Gala", age: 5, breed: "Dachschund", userID: "11" },
+  { id: "22", name: "Yellow", age: 5, breed: "Chihuahua", userID: "12" },
+  { id: "23", name: "Canela", age: 5, breed: "Chihuahua", userID: "13" },
+  { id: "24", name: "Manning", age: 12, breed: "Chihuahua", userID: "14" },
 ];
 
 let hobbyData = [
-  { id: "3", title: "Basketball", description: "Hoops", userid: "1" },
-  { id: "31", title: "Baseball", description: "Ball", userid: "11" },
-  { id: "32", title: "Coding", description: "Programming", userid: "12" },
-  { id: "33", title: "Cooking", description: "Eating", userid: "13" },
-  { id: "34", title: "Surfing", description: "Sharks", userid: "14" },
+  { id: "3", title: "Basketball", description: "Hoops", userID: "1" },
+  { id: "31", title: "Baseball", description: "Ball", userID: "11" },
+  { id: "32", title: "Coding", description: "Programming", userID: "12" },
+  { id: "33", title: "Cooking", description: "Eating", userID: "13" },
+  { id: "34", title: "Surfing", description: "Sharks", userID: "14" },
 ];
 
 let postData = [
-  //userid shows relationship
-  { id: "4", comment: " I am awesom42323423e", userid: "1" },
-  { id: "41", comment: " I am awesome5435243", userid: "1" },
-  { id: "42", comment: " I am awesome243423", userid: "12" },
-  { id: "43", comment: " I am awesome433243", userid: "13" },
-  { id: "44", comment: " I am awesome677", userid: "14" },
+  //userID shows relationship
+  { id: "4", comment: " I am awesom42323423e", userID: "1" },
+  { id: "41", comment: " I am awesome5435243", userID: "1" },
+  { id: "42", comment: " I am awesome243423", userID: "12" },
+  { id: "43", comment: " I am awesome433243", userID: "13" },
+  { id: "44", comment: " I am awesome677", userID: "14" },
 ];
 
 // ? Dummy Data def end
@@ -66,13 +66,13 @@ const UserType = new GraphQLObjectType({
       resolve(parent, args) {
         //type of parent is UserType
 
-        return _.filter(postData, { userid: parent.id });
+        return _.filter(postData, { userID: parent.id });
       },
     },
     hobbies: {
       type: new GraphQLList(HobbyType),
       resolve(parent, args) {
-        return _.filter(hobbyData, { userid: parent.id });
+        return _.filter(hobbyData, { userID: parent.id });
       },
     },
   }),
@@ -94,7 +94,7 @@ const DogType = new GraphQLObjectType({
     user: {
       type: UserType,
       resolve(parent, args) {
-        return _.find(usersData, parent.userid);
+        return _.find(usersData, parent.userID);
       },
     },
   }),
@@ -111,7 +111,7 @@ const HobbyType = new GraphQLObjectType({
     user: {
       type: UserType,
       resolve(parent, args) {
-        return _.find(usersData, { id: parent.userid });
+        return _.find(usersData, { id: parent.userID });
       },
     },
   }),
@@ -130,7 +130,7 @@ const PostType = new GraphQLObjectType({
       resolve(parent, args) {
         //parent, in this case, is PostType
         // Look how Post Instances are defined in our db
-        return _.find(usersData, { id: parent.userid });
+        return _.find(usersData, { id: parent.userID });
       },
     },
   }),
@@ -194,6 +194,7 @@ const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
     //* Think of the next definition as a method that creates a new instance
+    //! Notice that these methods/queries only create instances LOCALLY
     createUser: {
       type: UserType,
       args: {
@@ -216,10 +217,30 @@ const Mutation = new GraphQLObjectType({
       args: {
         //id: {type: GraphQLID},
         comment: { type: GraphQLString },
+        userID: { type: GraphQLID },
       },
       resolve(parent, args) {
-        let post = { comment: args.comment };
+        let post = { comment: args.comment, userID: args.userID };
         return post;
+      },
+    },
+    createHobby: {
+      type: HobbyType,
+      args: {
+        //! Try to make the arguments the same as the object definition
+        //id: {type: GraphQLID},
+        title: { type: GraphQLString },
+        description: { type: GraphQLString },
+        userID: { type: GraphQLID },
+      },
+      resolve(parent, args) {
+        let hobby = {
+          title: args.title,
+          description: args.description,
+          userID: args.userID,
+        };
+
+        return hobby;
       },
     },
   },
