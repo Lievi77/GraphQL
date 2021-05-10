@@ -21,19 +21,20 @@ let dogData = [
 ];
 
 let hobbyData = [
-  { id: "3", title: "Basketball", description: "Hoops" },
-  { id: "31", title: "Baseball", description: "Ball" },
-  { id: "32", title: "Coding", description: "Programming" },
-  { id: "33", title: "Cooking", description: "Eating" },
-  { id: "34", title: "Surfing", description: "Sharks" },
+  { id: "3", title: "Basketball", description: "Hoops", userid: "1" },
+  { id: "31", title: "Baseball", description: "Ball", userid: "11" },
+  { id: "32", title: "Coding", description: "Programming", userid: "12" },
+  { id: "33", title: "Cooking", description: "Eating", userid: "13" },
+  { id: "34", title: "Surfing", description: "Sharks", userid: "14" },
 ];
 
 let postData = [
-  { id: "4", comment: " I am awesom42323423e" },
-  { id: "41", comment: " I am awesome5435243" },
-  { id: "42", comment: " I am awesome243423" },
-  { id: "43", comment: " I am awesome433243" },
-  { id: "44", comment: " I am awesome677" },
+  //userid shows relationship
+  { id: "4", comment: " I am awesom42323423e", userid: "1" },
+  { id: "41", comment: " I am awesome5435243", userid: "11" },
+  { id: "42", comment: " I am awesome243423", userid: "12" },
+  { id: "43", comment: " I am awesome433243", userid: "13" },
+  { id: "44", comment: " I am awesome677", userid: "14" },
 ];
 
 // ? Dummy Data def end
@@ -77,6 +78,13 @@ const HobbyType = new GraphQLObjectType({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
     description: { type: GraphQLString },
+    //note how user goes inside the fields method
+    user: {
+      type: UserType,
+      resolve(parent, args) {
+        return _.find(usersData, { id: parent.userid });
+      },
+    },
   }),
 });
 
@@ -86,9 +94,19 @@ const PostType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     comment: { type: GraphQLString },
+    //Object Types can also have a resolve method
+    user: {
+      type: UserType,
+      //this resolve method is to map relationships
+      resolve(parent, args) {
+        //parent, in this case, is PostType
+        // Look how Post Instances are defined in our db
+        return _.find(usersData, { id: parent.userid });
+      },
+    },
   }),
 });
-//? end of type definition
+//? end of objts type definition
 
 //! IMPORTANT: ROOT QUERY
 // * We have to tell GraphQL how our queries will be structured

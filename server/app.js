@@ -18,5 +18,5 @@ app.use(
 
 app.listen(4000, () => {
   //usually located it localhost:PORTNUMBER
-  console.log("Listening for requests ");
+  console.log("Listening for requests");
 });
