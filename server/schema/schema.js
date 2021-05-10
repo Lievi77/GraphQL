@@ -13,11 +13,11 @@ let usersData = [
 ];
 
 let dogData = [
-  { id: "2", name: "Kipe", age: 10, breed: "Dachschund" },
-  { id: "21", name: "Gala", age: 5, breed: "Dachschund" },
-  { id: "22", name: "Yellow", age: 5, breed: "Chihuahua" },
-  { id: "23", name: "Canela", age: 5, breed: "Chihuahua" },
-  { id: "24", name: "Manning", age: 12, breed: "Chihuahua" },
+  { id: "2", name: "Kipe", age: 10, breed: "Dachschund", userid: "1" },
+  { id: "21", name: "Gala", age: 5, breed: "Dachschund", userid: "11" },
+  { id: "22", name: "Yellow", age: 5, breed: "Chihuahua", userid: "12" },
+  { id: "23", name: "Canela", age: 5, breed: "Chihuahua", userid: "13" },
+  { id: "24", name: "Manning", age: 12, breed: "Chihuahua", userid: "14" },
 ];
 
 let hobbyData = [
@@ -68,6 +68,12 @@ const DogType = new GraphQLObjectType({
     name: { type: GraphQLString },
     breed: { type: GraphQLString },
     age: { type: GraphQLInt },
+    user: {
+      type: UserType,
+      resolve(parent, args) {
+        return _.find(usersData, parent.userid);
+      },
+    },
   }),
 });
 
