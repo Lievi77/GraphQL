@@ -162,11 +162,26 @@ const RootQuery = new GraphQLObjectType({
         return _.find(usersData, { id: args.id });
       },
     },
+
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(parent, args) {
+        return usersData; // Note that we do not apply _.filter()
+      },
+    },
+
     dog: {
       type: DogType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
         return _.find(dogData, { id: args.id });
+      },
+    },
+
+    dogs: {
+      type: new GraphQLList(DogType),
+      resolve(parent, args) {
+        return dogData;
       },
     },
 
@@ -178,11 +193,25 @@ const RootQuery = new GraphQLObjectType({
       },
     },
 
+    hobbies: {
+      type: new GraphQLList(HobbyType),
+      resolve(parent, args) {
+        return hobbyData;
+      },
+    },
+
     post: {
       type: PostType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
         return _.find(postData, { id: args.id });
+      },
+    },
+
+    posts: {
+      type: new GraphQLList(PostType),
+      resolve(parent, args) {
+        return postData;
       },
     },
   },
