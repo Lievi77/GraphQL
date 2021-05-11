@@ -65,7 +65,6 @@ const UserType = new GraphQLObjectType({
       type: new GraphQLList(PostType),
       resolve(parent, args) {
         //type of parent is UserType
-
         return _.filter(postData, { userID: parent.id });
       },
     },

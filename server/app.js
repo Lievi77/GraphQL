@@ -3,6 +3,7 @@ const { graphqlHTTP } = require("express-graphql");
 
 //make our schema be known/inferred to our app
 const schema = require("./schema/schema"); //no need to add .js
+const testSchema = require("./schema/types_schema"); //no need to add .js
 
 const app = express();
 
@@ -12,7 +13,7 @@ app.use(
   graphqlHTTP({
     //ie, we see the graphiql playground
     graphiql: true,
-    schema, //ES6 syntax
+    schema: testSchema, //ES6 syntax
   })
 );
 
