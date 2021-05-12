@@ -1,7 +1,10 @@
 //! Schema def example
 const graphql = require("graphql");
 const _ = require("lodash");
-
+const User = require("../model/user");
+const Hobby = require("../model/hobby");
+const Dog = require("../model/dog");
+const Post = require("../model/post");
 // ? Dummy Data Def
 
 let usersData = [
