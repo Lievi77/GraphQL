@@ -137,6 +137,8 @@ const PostType = new GraphQLObjectType({
         //parent, in this case, is PostType
         // Look how Post Instances are defined in our db
         //  return _.find(usersData, { id: parent.userID });
+        //field reference must be equal
+        return User.findById(parent.userID);
       },
     },
   }),
@@ -170,6 +172,7 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(UserType),
       resolve(parent, args) {
         // return usersData; // Note that we do not apply _.filter()
+        return User.find({}); //mongoose command to query ALL documents in db
       },
     },
 
@@ -186,6 +189,7 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(DogType),
       resolve(parent, args) {
         //  return dogData;
+        return Dog.find({});
       },
     },
 
@@ -202,6 +206,7 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(HobbyType),
       resolve(parent, args) {
         //  return hobbyData;
+        return Hobby.find({});
       },
     },
 
@@ -210,6 +215,7 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
         //  return _.find(postData, { id: args.id });
+        return Post.findById(args.id);
       },
     },
 
@@ -217,6 +223,7 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(PostType),
       resolve(parent, args) {
         //  return postData;
+        return Post.find({});
       },
     },
   },
