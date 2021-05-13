@@ -117,6 +117,7 @@ const HobbyType = new GraphQLObjectType({
       type: UserType,
       resolve(parent, args) {
         // return _.find(usersData, { id: parent.userID });
+        return User.findById(parent.userID);
       },
     },
   }),
@@ -177,6 +178,7 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
         // return _.find(dogData, { id: args.id });
+        return Dog.findById(args.id);
       },
     },
 
@@ -192,6 +194,7 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
         // return _.find(hobbyData, { id: args.id });
+        return Hobby.findById(args.id);
       },
     },
 
