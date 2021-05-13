@@ -11,4 +11,4 @@ const userSchema = new MSchema({
   profession: String,
 });
 
-module.exports = mongoose.model("User".userSchema);
+module.exports = mongoose.model("User", userSchema);

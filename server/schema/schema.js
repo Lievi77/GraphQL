@@ -5,40 +5,41 @@ const User = require("../model/user");
 const Hobby = require("../model/hobby");
 const Dog = require("../model/dog");
 const Post = require("../model/post");
+
 // ? Dummy Data Def
 
-let usersData = [
-  { id: "1", name: "Emily", age: 29, profession: "Sandwich Artist" },
-  { id: "11", name: "Emily2", age: 39, profession: "Barista" },
-  { id: "12", name: "Emily3", age: 49, profession: "Data Scientist" },
-  { id: "13", name: "Emily4", age: 59, profession: "Streamer" },
-  { id: "14", name: "Emily5", age: 69, profession: "Gamer" },
-];
+// let usersData = [
+//   { id: "1", name: "Emily", age: 29, profession: "Sandwich Artist" },
+//   { id: "11", name: "Emily2", age: 39, profession: "Barista" },
+//   { id: "12", name: "Emily3", age: 49, profession: "Data Scientist" },
+//   { id: "13", name: "Emily4", age: 59, profession: "Streamer" },
+//   { id: "14", name: "Emily5", age: 69, profession: "Gamer" },
+// ];
 
-let dogData = [
-  { id: "2", name: "Kipe", age: 10, breed: "Dachschund", userID: "1" },
-  { id: "21", name: "Gala", age: 5, breed: "Dachschund", userID: "11" },
-  { id: "22", name: "Yellow", age: 5, breed: "Chihuahua", userID: "12" },
-  { id: "23", name: "Canela", age: 5, breed: "Chihuahua", userID: "13" },
-  { id: "24", name: "Manning", age: 12, breed: "Chihuahua", userID: "14" },
-];
+// let dogData = [
+//   { id: "2", name: "Kipe", age: 10, breed: "Dachschund", userID: "1" },
+//   { id: "21", name: "Gala", age: 5, breed: "Dachschund", userID: "11" },
+//   { id: "22", name: "Yellow", age: 5, breed: "Chihuahua", userID: "12" },
+//   { id: "23", name: "Canela", age: 5, breed: "Chihuahua", userID: "13" },
+//   { id: "24", name: "Manning", age: 12, breed: "Chihuahua", userID: "14" },
+// ];
 
-let hobbyData = [
-  { id: "3", title: "Basketball", description: "Hoops", userID: "1" },
-  { id: "31", title: "Baseball", description: "Ball", userID: "11" },
-  { id: "32", title: "Coding", description: "Programming", userID: "12" },
-  { id: "33", title: "Cooking", description: "Eating", userID: "13" },
-  { id: "34", title: "Surfing", description: "Sharks", userID: "14" },
-];
+// let hobbyData = [
+//   { id: "3", title: "Basketball", description: "Hoops", userID: "1" },
+//   { id: "31", title: "Baseball", description: "Ball", userID: "11" },
+//   { id: "32", title: "Coding", description: "Programming", userID: "12" },
+//   { id: "33", title: "Cooking", description: "Eating", userID: "13" },
+//   { id: "34", title: "Surfing", description: "Sharks", userID: "14" },
+// ];
 
-let postData = [
-  //userID shows relationship
-  { id: "4", comment: " I am awesom42323423e", userID: "1" },
-  { id: "41", comment: " I am awesome5435243", userID: "1" },
-  { id: "42", comment: " I am awesome243423", userID: "12" },
-  { id: "43", comment: " I am awesome433243", userID: "13" },
-  { id: "44", comment: " I am awesome677", userID: "14" },
-];
+// let postData = [
+//   //userID shows relationship
+//   { id: "4", comment: " I am awesom42323423e", userID: "1" },
+//   { id: "41", comment: " I am awesome5435243", userID: "1" },
+//   { id: "42", comment: " I am awesome243423", userID: "12" },
+//   { id: "43", comment: " I am awesome433243", userID: "13" },
+//   { id: "44", comment: " I am awesome677", userID: "14" },
+// ];
 
 // ? Dummy Data def end
 
@@ -68,13 +69,14 @@ const UserType = new GraphQLObjectType({
       type: new GraphQLList(PostType),
       resolve(parent, args) {
         //type of parent is UserType
-        return _.filter(postData, { userID: parent.id });
+        // return _.filter(postData, { userID: parent.id });
+        //Mongoose provides find function
       },
     },
     hobbies: {
       type: new GraphQLList(HobbyType),
       resolve(parent, args) {
-        return _.filter(hobbyData, { userID: parent.id });
+        // return _.filter(hobbyData, { userID: parent.id });
       },
     },
   }),
@@ -96,7 +98,8 @@ const DogType = new GraphQLObjectType({
     user: {
       type: UserType,
       resolve(parent, args) {
-        return _.find(usersData, parent.userID);
+        //  return _.find(usersData, parent.userID);
+        return User.findById(parent.userID);
       },
     },
   }),
@@ -113,7 +116,7 @@ const HobbyType = new GraphQLObjectType({
     user: {
       type: UserType,
       resolve(parent, args) {
-        return _.find(usersData, { id: parent.userID });
+        // return _.find(usersData, { id: parent.userID });
       },
     },
   }),
@@ -132,7 +135,7 @@ const PostType = new GraphQLObjectType({
       resolve(parent, args) {
         //parent, in this case, is PostType
         // Look how Post Instances are defined in our db
-        return _.find(usersData, { id: parent.userID });
+        //  return _.find(usersData, { id: parent.userID });
       },
     },
   }),
@@ -156,19 +159,16 @@ const RootQuery = new GraphQLObjectType({
         //we resolve with data
         // ie, we fetch and return using the information provided
         // think of it as an entry point to our graph/network
-
         //get and return data from datasource / database
-
-        //! To query obj users we will use the Lodash module
-        //* the second argument for find() is the args provided.
-        return _.find(usersData, { id: args.id });
+        //return _.find(usersData, { id: args.id });
+        return User.findById(args.id);
       },
     },
 
     users: {
       type: new GraphQLList(UserType),
       resolve(parent, args) {
-        return usersData; // Note that we do not apply _.filter()
+        // return usersData; // Note that we do not apply _.filter()
       },
     },
 
@@ -176,14 +176,14 @@ const RootQuery = new GraphQLObjectType({
       type: DogType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return _.find(dogData, { id: args.id });
+        // return _.find(dogData, { id: args.id });
       },
     },
 
     dogs: {
       type: new GraphQLList(DogType),
       resolve(parent, args) {
-        return dogData;
+        //  return dogData;
       },
     },
 
@@ -191,14 +191,14 @@ const RootQuery = new GraphQLObjectType({
       type: HobbyType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return _.find(hobbyData, { id: args.id });
+        // return _.find(hobbyData, { id: args.id });
       },
     },
 
     hobbies: {
       type: new GraphQLList(HobbyType),
       resolve(parent, args) {
-        return hobbyData;
+        //  return hobbyData;
       },
     },
 
@@ -206,21 +206,21 @@ const RootQuery = new GraphQLObjectType({
       type: PostType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return _.find(postData, { id: args.id });
+        //  return _.find(postData, { id: args.id });
       },
     },
 
     posts: {
       type: new GraphQLList(PostType),
       resolve(parent, args) {
-        return postData;
+        //  return postData;
       },
     },
   },
 });
 
 //! MUTATIONS
-
+//* Mutations often have createUser queries
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
@@ -235,11 +235,16 @@ const Mutation = new GraphQLObjectType({
         profession: { type: GraphQLString },
       },
       resolve(parent, args) {
-        let user = {
+        let user = new User({
+          //! Note that this is a MongoDB user obj type
           name: args.name,
           age: args.age,
           profession: args.profession,
-        };
+        });
+        //previously we just returned the user obj
+        // now we just save it to our mongoose db
+        //? Save to db
+        user.save(); //method provided by import
         return user;
       },
     },
@@ -251,7 +256,10 @@ const Mutation = new GraphQLObjectType({
         userID: { type: GraphQLID },
       },
       resolve(parent, args) {
-        let post = { comment: args.comment, userID: args.userID };
+        let post = new Post({ comment: args.comment, userID: args.userID });
+
+        post.save();
+
         return post;
       },
     },
@@ -265,13 +273,36 @@ const Mutation = new GraphQLObjectType({
         userID: { type: GraphQLID },
       },
       resolve(parent, args) {
-        let hobby = {
+        let hobby = new Hobby({
           title: args.title,
           description: args.description,
           userID: args.userID,
-        };
+        });
+
+        hobby.save();
 
         return hobby;
+      },
+    },
+
+    createDog: {
+      type: DogType,
+      args: {
+        name: { type: GraphQLString },
+        breed: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        userID: { type: GraphQLID },
+      },
+      resolve(parent, args) {
+        let doggo = new Dog({
+          name: args.name,
+          breed: args.breed,
+          age: args.age,
+          userID: args.userID,
+        });
+
+        doggo.save();
+        return doggo;
       },
     },
   },

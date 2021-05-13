@@ -24,7 +24,7 @@ app.use(
   graphqlHTTP({
     //ie, we see the graphiql playground
     graphiql: true,
-    schema: shema, //ES6 syntax
+    schema: schema, //ES6 syntax
   })
 );
 
