@@ -5,6 +5,8 @@ require("dotenv").config(); //loads .env credentials on process.env
 
 const mongo_cluster_url = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@gql-cluster-sandbox.yfdby.mongodb.net/${process.env.MONGODB_DBNAME}?retryWrites=true&w=majority`;
 
+const cors = require("cors"); //! for security reasons
+
 mongoose.connect(
   mongo_cluster_url,
   { useNewUrlParser: true, useUnifiedTopology: true } // removes deprecated warnings
@@ -17,6 +19,8 @@ const schema = require("./schema/schema"); //no need to add .js
 const testSchema = require("./schema/types_schema");
 
 const app = express();
+
+app.use(cors());
 
 //.use lets us pass an endpoint.
 app.use(
