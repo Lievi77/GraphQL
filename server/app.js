@@ -21,7 +21,6 @@ const testSchema = require("./schema/types_schema");
 const app = express();
 
 app.use(cors());
-
 //.use lets us pass an endpoint.
 app.use(
   "/graphql",

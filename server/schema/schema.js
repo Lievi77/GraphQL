@@ -51,6 +51,7 @@ const {
   GraphQLInt,
   GraphQLSchema,
   GraphQLList,
+  GraphQLNonNull,
 } = graphql;
 
 // ? Create new types/objs
@@ -243,9 +244,9 @@ const Mutation = new GraphQLObjectType({
       type: UserType,
       args: {
         //id: { type: GraphQLID }
-        name: { type: GraphQLString },
-        age: { type: GraphQLInt },
-        profession: { type: GraphQLString },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        age: { type: new GraphQLNonNull(GraphQLInt) },
+        profession: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
         let user = new User({
@@ -264,8 +265,8 @@ const Mutation = new GraphQLObjectType({
       type: PostType,
       args: {
         //id: {type: GraphQLID},
-        comment: { type: GraphQLString },
-        userID: { type: GraphQLID },
+        comment: { type: new GraphQLNonNull(GraphQLString) },
+        userID: { type: new GraphQLNonNull(GraphQLID) },
       },
       resolve(parent, args) {
         let post = new Post({ comment: args.comment, userID: args.userID });
@@ -278,9 +279,9 @@ const Mutation = new GraphQLObjectType({
       args: {
         //! Try to list the same args as HobbyType
         //id: {type: GraphQLID},
-        title: { type: GraphQLString },
-        description: { type: GraphQLString },
-        userID: { type: GraphQLID },
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        description: { type: new GraphQLNonNull(GraphQLString) },
+        userID: { type: new GraphQLNonNull(GraphQLID) },
       },
       resolve(parent, args) {
         let hobby = new Hobby({
@@ -296,10 +297,10 @@ const Mutation = new GraphQLObjectType({
     createDog: {
       type: DogType,
       args: {
-        name: { type: GraphQLString },
-        breed: { type: GraphQLString },
-        age: { type: GraphQLInt },
-        userID: { type: GraphQLID },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        breed: { type: new GraphQLNonNull(GraphQLString) },
+        age: { type: new GraphQLNonNull(GraphQLInt) },
+        userID: { type: new GraphQLNonNull(GraphQLID) },
       },
       resolve(parent, args) {
         let doggo = new Dog({
