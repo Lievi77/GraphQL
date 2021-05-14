@@ -71,12 +71,15 @@ const UserType = new GraphQLObjectType({
         //type of parent is UserType
         // return _.filter(postData, { userID: parent.id });
         //Mongoose provides find function
+        return Post.find({ userID: parent.id });
       },
     },
     hobbies: {
       type: new GraphQLList(HobbyType),
       resolve(parent, args) {
         // return _.filter(hobbyData, { userID: parent.id });
+
+        return Hobby.find({ userID: parent.id });
       },
     },
   }),
@@ -254,8 +257,7 @@ const Mutation = new GraphQLObjectType({
         //previously we just returned the user obj
         // now we just save it to our mongoose db
         //? Save to db
-        user.save(); //method provided by import
-        return user;
+        return user.save(); //method provided by import
       },
     },
     createPost: {
@@ -268,15 +270,13 @@ const Mutation = new GraphQLObjectType({
       resolve(parent, args) {
         let post = new Post({ comment: args.comment, userID: args.userID });
 
-        post.save();
-
-        return post;
+        return post.save();
       },
     },
     createHobby: {
       type: HobbyType,
       args: {
-        //! Try to make the arguments the same as the object definition
+        //! Try to list the same args as HobbyType
         //id: {type: GraphQLID},
         title: { type: GraphQLString },
         description: { type: GraphQLString },
@@ -289,9 +289,7 @@ const Mutation = new GraphQLObjectType({
           userID: args.userID,
         });
 
-        hobby.save();
-
-        return hobby;
+        return hobby.save();
       },
     },
 
@@ -311,8 +309,7 @@ const Mutation = new GraphQLObjectType({
           userID: args.userID,
         });
 
-        doggo.save();
-        return doggo;
+        return doggo.save();
       },
     },
   },
