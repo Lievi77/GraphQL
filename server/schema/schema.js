@@ -291,6 +291,23 @@ const Mutation = new GraphQLObjectType({
       },
     },
 
+    //* remove user
+    removeUser: {
+      type: UserType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        let rmvd = User.findByIdAndRemove(args.id).exec(); //.exec indicates immediate execution
+
+        if (!rmvd) {
+          console.log(rmvd);
+          throw new Error("Something went wrong");
+        }
+        return rmvd;
+      },
+    },
+
     createPost: {
       type: PostType,
       args: {
@@ -322,6 +339,21 @@ const Mutation = new GraphQLObjectType({
         let opts = { new: true };
 
         return Post.findByIdAndUpdate(args.id, update, opts);
+      },
+    },
+    removePost: {
+      type: PostType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        let rmvd = Post.findByIdAndRemove(args.id).exec(); //.exec indicates immediate execution
+
+        if (!rmvd) {
+          console.log(rmvd);
+          throw new Error("Something went wrong");
+        }
+        return rmvd;
       },
     },
 
@@ -367,6 +399,20 @@ const Mutation = new GraphQLObjectType({
       },
     },
 
+    removeHobby: {
+      type: HobbyType,
+      args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+      resolve(parent, args) {
+        let rmvd = Hobby.findByIdAndRemove(args.id).exec(); //.exec indicates immediate execution
+
+        if (!rmvd) {
+          console.log(rmvd);
+          throw new Error("Something went wrong");
+        }
+        return rmvd;
+      },
+    },
+
     createDog: {
       type: DogType,
       args: {
@@ -406,6 +452,19 @@ const Mutation = new GraphQLObjectType({
         };
         let opts = { new: true };
         return Dog.findOneAndUpdate(args.id, update, opts);
+      },
+    },
+    removeDog: {
+      type: DogType,
+      args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+      resolve(parent, args) {
+        let rmvd = Dog.findByIdAndRemove(args.id).exec(); //.exec indicates immediate execution
+
+        if (!rmvd) {
+          console.log(rmvd);
+          throw new Error("Something went wrong");
+        }
+        return rmvd;
       },
     },
   },
