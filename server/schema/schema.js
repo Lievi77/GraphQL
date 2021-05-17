@@ -118,6 +118,7 @@ const HobbyType = new GraphQLObjectType({
     description: { type: GraphQLString },
     //note how user goes inside the fields method
     user: {
+      //acts as USERID field
       type: UserType,
       resolve(parent, args) {
         // return _.find(usersData, { id: parent.userID });
@@ -303,6 +304,27 @@ const Mutation = new GraphQLObjectType({
         return post.save();
       },
     },
+
+    updatePost: {
+      type: PostType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        comment: { type: new GraphQLNonNull(GraphQLString) },
+        //userID: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        let update = {
+          $set: {
+            comment: args.comment,
+            //  userID: args.userID,
+          },
+        };
+        let opts = { new: true };
+
+        return Post.findByIdAndUpdate(args.id, update, opts);
+      },
+    },
+
     createHobby: {
       type: HobbyType,
       args: {
@@ -323,6 +345,28 @@ const Mutation = new GraphQLObjectType({
       },
     },
 
+    updateHobby: {
+      type: HobbyType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        title: { type: new GraphQLNonNull(GraphQLString) },
+        description: { type: new GraphQLNonNull(GraphQLString) },
+        //userID: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        let update = {
+          $set: {
+            title: args.title,
+            description: args.description,
+          },
+        };
+
+        let opts = {};
+
+        return Hobby.findOneAndUpdate(args.id, update, opts);
+      },
+    },
+
     createDog: {
       type: DogType,
       args: {
@@ -340,6 +384,28 @@ const Mutation = new GraphQLObjectType({
         });
 
         return doggo.save();
+      },
+    },
+
+    updateDog: {
+      type: DogType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        breed: { type: new GraphQLNonNull(GraphQLString) },
+        age: { type: new GraphQLNonNull(GraphQLInt) },
+        //userID: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        let update = {
+          $set: {
+            name: args.name,
+            breed: args.breed,
+            age: args.age,
+          },
+        };
+        let opts = { new: true };
+        return Dog.findOneAndUpdate(args.id, update, opts);
       },
     },
   },
