@@ -9,7 +9,8 @@ const cors = require("cors"); //! for security reasons
 
 mongoose.connect(
   mongo_cluster_url,
-  { useNewUrlParser: true, useUnifiedTopology: true } // removes deprecated warnings
+  //! added useFindAndModify = false to avoid deprecation warnings
+  { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false } // removes deprecated warnings
 );
 mongoose.connection.once("open", () => {
   console.log("Connection successful");

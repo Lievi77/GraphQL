@@ -243,7 +243,7 @@ const Mutation = new GraphQLObjectType({
     createUser: {
       type: UserType,
       args: {
-        //id: { type: GraphQLID }
+        //id: { type: GraphQLID } // Handled by MongoDB
         name: { type: new GraphQLNonNull(GraphQLString) },
         age: { type: new GraphQLNonNull(GraphQLInt) },
         profession: { type: new GraphQLNonNull(GraphQLString) },
@@ -261,6 +261,35 @@ const Mutation = new GraphQLObjectType({
         return user.save(); //method provided by import
       },
     },
+
+    //* Update an user
+
+    updateUser: {
+      type: UserType,
+      args: {
+        // ? Need to pass ID in order to specify which object to update
+        id: { type: new GraphQLNonNull(GraphQLID) },
+        // * Same args as in createUser
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        age: { type: GraphQLInt },
+        profession: { type: GraphQLString },
+      },
+
+      resolve(parent, args) {
+        let update = {
+          //* $set is an operation defined by mongoose. Updates the specified fields with new values
+          $set: {
+            name: args.name,
+            age: args.age,
+            profession: args.profession,
+          },
+        };
+        let opts = { new: true }; //returns the updated data instead of original
+
+        return User.findByIdAndUpdate(args.id, update, opts);
+      },
+    },
+
     createPost: {
       type: PostType,
       args: {
