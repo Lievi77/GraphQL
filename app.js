@@ -4,7 +4,7 @@ const mongoose = require("mongoose"); //for mongoDB connection
 require("dotenv").config(); //loads .env credentials on process.env
 
 //console.log(process.env.MONGODB_USERNAME);
-const mongo_cluster_url = `mongodb+srv://levi-master:${process.env.MONGODB_PASSWORD}@gql-cluster-sandbox.yfdby.mongodb.net/gql-cluster-sandbox?retryWrites=true&w=majority`;
+const mongo_cluster_url = `mongodb+srv://levi-master:bnqLxQzbC6ioGHjd@gql-cluster-sandbox.yfdby.mongodb.net/gql-cluster-sandbox?retryWrites=true&w=majority`;
 
 const cors = require("cors"); //! for security reasons
 
