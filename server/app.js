@@ -7,6 +7,8 @@ const mongo_cluster_url = `mongodb+srv://${process.env.MONGODB_USERNAME}:${proce
 
 const cors = require("cors"); //! for security reasons
 
+const port = process.env.PORT || 4000;
+
 mongoose.connect(
   mongo_cluster_url,
   //! added useFindAndModify = false to avoid deprecation warnings
@@ -32,7 +34,7 @@ app.use(
   })
 );
 
-app.listen(4000, () => {
+app.listen(port, () => {
   //usually located it localhost:PORTNUMBER
   console.log("Listening for requests");
 });
